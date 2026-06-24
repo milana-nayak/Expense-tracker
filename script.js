@@ -1,8 +1,18 @@
 const form = document.getElementById("expense-form");
 const nameInput = document.getElementById("expense-name");
 const amountInput = document.getElementById("expense-amount");
+const categoryInput = document.getElementById("expense-category");
+const dateInput = document.getElementById("expense-date");
+const emptyMessage = document.getElementById("empty-message");
 const expenseList = document.getElementById("expense-list");
 const totalElement = document.getElementById("total");
+
+if(expenses.length===0){
+    emptyMessage.style.display="block";
+}
+else{
+    emptyMessage.style.display="none";
+}
 
 let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 let total = 0;
@@ -15,10 +25,19 @@ function loadExpenses() {
   expenses.forEach((expense, index) => {
     const li = document.createElement("li");
 
-    li.innerHTML = `
-      <span>${expense.name} - ₹${expense.amount}</span>
-      <button class="delete-btn">X</button>
-    `;
+   li.innerHTML = `
+<div class="expense-info">
+    <h3>${expense.name}</h3>
+
+    <p>💰 ₹${expense.amount.toLocaleString("en-IN")}</p>
+
+    <p>📂 ${expense.category}</p>
+
+    <p>📅 ${expense.date}</p>
+</div>
+
+<button class="delete-btn">🗑</button>
+`;
 
     const deleteBtn = li.querySelector(".delete-btn");
 
@@ -46,11 +65,13 @@ form.addEventListener("submit", function (e) {
     return;
   }
 
-  const newExpense = {
+const newExpense = {
     name: name,
-    amount: amount
-  };
-
+    amount: amount,
+    category: categoryInput.value,
+    date: dateInput.value
+};
+  
   expenses.push(newExpense);
 
   localStorage.setItem("expenses", JSON.stringify(expenses));
@@ -59,6 +80,8 @@ form.addEventListener("submit", function (e) {
 
   nameInput.value = "";
   amountInput.value = "";
+  categoryInput.value = "";
+dateInput.value = "";
 });
 
 // Delete expense
