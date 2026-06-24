@@ -3,95 +3,101 @@ const nameInput = document.getElementById("expense-name");
 const amountInput = document.getElementById("expense-amount");
 const categoryInput = document.getElementById("expense-category");
 const dateInput = document.getElementById("expense-date");
-const emptyMessage = document.getElementById("empty-message");
+
 const expenseList = document.getElementById("expense-list");
 const totalElement = document.getElementById("total");
+const emptyMessage = document.getElementById("empty-message");
 
-if(expenses.length===0){
-    emptyMessage.style.display="block";
-}
-else{
-    emptyMessage.style.display="none";
-}
-
+// Load expenses from Local Storage
 let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-let total = 0;
 
-// Load saved expenses on page load
+// Function to display expenses
 function loadExpenses() {
-  expenseList.innerHTML = "";
-  total = 0;
 
-  expenses.forEach((expense, index) => {
-    const li = document.createElement("li");
+    expenseList.innerHTML = "";
 
-   li.innerHTML = `
-<div class="expense-info">
-    <h3>${expense.name}</h3>
+    let total = 0;
 
-    <p>💰 ₹${expense.amount.toLocaleString("en-IN")}</p>
+    if (expenses.length === 0) {
+        emptyMessage.style.display = "block";
+    } else {
+        emptyMessage.style.display = "none";
+    }
 
-    <p>📂 ${expense.category}</p>
+    expenses.forEach((expense, index) => {
 
-    <p>📅 ${expense.date}</p>
-</div>
+        const li = document.createElement("li");
 
-<button class="delete-btn">🗑</button>
-`;
+        li.innerHTML = `
+            <div class="expense-info">
+                <h3>${expense.name}</h3>
+                <p>💰 ₹${Number(expense.amount).toLocaleString("en-IN")}</p>
+                <p>📂 ${expense.category || "Others"}</p>
+                <p>📅 ${expense.date || "-"}</p>
+            </div>
 
-    const deleteBtn = li.querySelector(".delete-btn");
+            <button class="delete-btn">🗑</button>
+        `;
 
-    deleteBtn.addEventListener("click", function () {
-      deleteExpense(index);
+        const deleteBtn = li.querySelector(".delete-btn");
+
+        deleteBtn.addEventListener("click", function () {
+            deleteExpense(index);
+        });
+
+        expenseList.appendChild(li);
+
+        total += Number(expense.amount);
     });
 
-    expenseList.appendChild(li);
-
-    total += expense.amount;
-  });
-
-  totalElement.textContent = total;
+    totalElement.textContent = total.toLocaleString("en-IN");
 }
 
-// Add new expense
+// Add Expense
 form.addEventListener("submit", function (e) {
-  e.preventDefault();
 
-  const name = nameInput.value.trim();
-  const amount = Number(amountInput.value);
+    e.preventDefault();
 
-  if (name === "" || amount <= 0) {
-    alert("Please enter valid expense details");
-    return;
-  }
+    const name = nameInput.value.trim();
+    const amount = Number(amountInput.value);
+    const category = categoryInput.value;
+    const date = dateInput.value;
 
-const newExpense = {
-    name: name,
-    amount: amount,
-    category: categoryInput.value,
-    date: dateInput.value
-};
-  
-  expenses.push(newExpense);
+    if (
+        name === "" ||
+        amount <= 0 ||
+        category === "" ||
+        date === ""
+    ) {
+        alert("Please fill all fields correctly.");
+        return;
+    }
 
-  localStorage.setItem("expenses", JSON.stringify(expenses));
+    const newExpense = {
+        name,
+        amount,
+        category,
+        date
+    };
 
-  loadExpenses();
+    expenses.push(newExpense);
 
-  nameInput.value = "";
-  amountInput.value = "";
-  categoryInput.value = "";
-dateInput.value = "";
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+
+    loadExpenses();
+
+    form.reset();
 });
 
-// Delete expense
+// Delete Expense
 function deleteExpense(index) {
-  expenses.splice(index, 1);
 
-  localStorage.setItem("expenses", JSON.stringify(expenses));
+    expenses.splice(index, 1);
 
-  loadExpenses();
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+
+    loadExpenses();
 }
 
-// Initial load
+// Initial Load
 loadExpenses();
