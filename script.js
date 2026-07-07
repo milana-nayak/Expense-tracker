@@ -19,6 +19,7 @@ function loadExpenses() {
     expenseList.innerHTML = "";
 
     let total = 0;
+    let highest = 0;
 
     if (expenses.length === 0) {
         emptyMessage.style.display = "block";
@@ -50,9 +51,14 @@ function loadExpenses() {
         expenseList.appendChild(li);
 
         total += Number(expense.amount);
+        if (Number(expense.amount) > highest) {
+          highest = Number(expense.amount);
+}
     });
 
     totalElement.textContent = total.toLocaleString("en-IN");
+    transactionElement.textContent = expenses.length;
+    highestElement.textContent = highest.toLocaleString("en-IN");
 }
 
 // Add Expense
