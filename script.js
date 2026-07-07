@@ -6,6 +6,8 @@ const dateInput = document.getElementById("expense-date");
 
 const expenseList = document.getElementById("expense-list");
 const totalElement = document.getElementById("total");
+const transactionElement = document.getElementById("transactions");
+const highestElement = document.getElementById("highest");
 const emptyMessage = document.getElementById("empty-message");
 
 // Load expenses from Local Storage
