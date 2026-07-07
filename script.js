@@ -12,7 +12,7 @@ const emptyMessage = document.getElementById("empty-message");
 
 // Load expenses from Local Storage
 let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
+let editIndex = -1;
 // Function to display expenses
 function loadExpenses() {
 
@@ -46,7 +46,18 @@ function loadExpenses() {
         `;
 
         const deleteBtn = li.querySelector(".delete-btn");
+        const editBtn = li.querySelector(".edit-btn");
+editBtn.addEventListener("click", function () {
 
+    nameInput.value = expense.name;
+    amountInput.value = expense.amount;
+    categoryInput.value = expense.category;
+    dateInput.value = expense.date;
+
+    editIndex = index;
+
+    form.querySelector("button").textContent = "Update Expense";
+});
         deleteBtn.addEventListener("click", function () {
             deleteExpense(index);
         });
@@ -91,7 +102,18 @@ form.addEventListener("submit", function (e) {
         date
     };
 
+    if(editIndex === -1){
+
     expenses.push(newExpense);
+
+}else{
+
+    expenses[editIndex] = newExpense;
+
+    editIndex = -1;
+
+    form.querySelector("button").textContent = "Add Expense";
+}
 
     localStorage.setItem("expenses", JSON.stringify(expenses));
 
