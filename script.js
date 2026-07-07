@@ -39,7 +39,10 @@ function loadExpenses() {
                 <p>📅 ${expense.date || "-"}</p>
             </div>
 
-            <button class="delete-btn">🗑</button>
+            <div class="buttons">
+               <button class="edit-btn">✏ Edit</button>
+               <button class="delete-btn">🗑 Delete</button>
+            </div>
         `;
 
         const deleteBtn = li.querySelector(".delete-btn");
