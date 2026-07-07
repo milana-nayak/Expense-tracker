@@ -47,12 +47,12 @@ function loadExpenses() {
 
         const deleteBtn = li.querySelector(".delete-btn");
         const editBtn = li.querySelector(".edit-btn");
-editBtn.addEventListener("click", function () {
+        editBtn.addEventListener("click", function () {
 
-    nameInput.value = expense.name;
-    amountInput.value = expense.amount;
-    categoryInput.value = expense.category;
-    dateInput.value = expense.date;
+            nameInput.value = expense.name;
+            amountInput.value = expense.amount;
+            categoryInput.value = expense.category;
+            dateInput.value = expense.date;
 
     editIndex = index;
 
