@@ -2,7 +2,6 @@ const form = document.getElementById("expense-form");
 const nameInput = document.getElementById("expense-name");
 const amountInput = document.getElementById("expense-amount");
 const categoryInput = document.getElementById("expense-category");
-const dateInput = document.getElementById("expense-date");
 
 const expenseList = document.getElementById("expense-list");
 const totalElement = document.getElementById("total");
@@ -36,7 +35,6 @@ function loadExpenses() {
                 <h3>${expense.name}</h3>
                 <p>💰 ₹${Number(expense.amount).toLocaleString("en-IN")}</p>
                 <p>📂 ${expense.category || "Others"}</p>
-                <p>📅 ${expense.date || "-"}</p>
             </div>
 
             <div class="buttons">
@@ -52,7 +50,6 @@ function loadExpenses() {
             nameInput.value = expense.name;
             amountInput.value = expense.amount;
             categoryInput.value = expense.category;
-            dateInput.value = expense.date;
 
     editIndex = index;
 
@@ -83,13 +80,11 @@ form.addEventListener("submit", function (e) {
     const name = nameInput.value.trim();
     const amount = Number(amountInput.value);
     const category = categoryInput.value;
-    const date = dateInput.value;
 
     if (
         name === "" ||
         amount <= 0 ||
         category === "" ||
-        date === ""
     ) {
         alert("Please fill all fields correctly.");
         return;
@@ -99,7 +94,6 @@ form.addEventListener("submit", function (e) {
         name,
         amount,
         category,
-        date
     };
 
     if(editIndex === -1){
