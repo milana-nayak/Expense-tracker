@@ -48,7 +48,9 @@ function loadExpenses() {
     expenses.forEach((expense, index) => {
       const searchText = searchInput.value.toLowerCase();
 
-         if (!expense.name.toLowerCase().includes(searchText)) {
+         if (!expense.name.toLowerCase().includes(searchText)
+            !expense.category.toLowerCase().includes(searchText)
+      ) {
            return;
          }
         const selectedCategory = filterCategory.value;
