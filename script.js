@@ -27,7 +27,14 @@ function loadExpenses() {
     }
 
     expenses.forEach((expense, index) => {
+const selectedCategory = filterCategory.value;
 
+    if (
+        selectedCategory !== "All" &&
+        expense.category !== selectedCategory
+    ) {
+        return;
+    }
         const li = document.createElement("li");
 
         li.innerHTML = `
@@ -125,6 +132,6 @@ function deleteExpense(index) {
 
     loadExpenses();
 }
-
+filterCategory.addEventListener("change", loadExpenses);
 // Initial Load
 loadExpenses();
