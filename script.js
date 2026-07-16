@@ -3,16 +3,20 @@ const nameInput = document.getElementById("expense-name");
 const amountInput = document.getElementById("expense-amount");
 const categoryInput = document.getElementById("expense-category");
 const filterCategory = document.getElementById("filter-category");
+
 const expenseList = document.getElementById("expense-list");
 const totalElement = document.getElementById("total");
 const transactionElement = document.getElementById("transactions");
 const highestElement = document.getElementById("highest");
 const emptyMessage = document.getElementById("empty-message");
 
+const submitBtn = document.getElementById("submit-btn");
+
 // Load expenses from Local Storage
 let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 let editIndex = -1;
-// Function to display expenses
+
+// Display Expenses
 function loadExpenses() {
 
     expenseList.innerHTML = "";
@@ -20,66 +24,78 @@ function loadExpenses() {
     let total = 0;
     let highest = 0;
 
+    // Dashboard calculations (all expenses)
+    expenses.forEach(expense => {
+        total += Number(expense.amount);
+
+        if (Number(expense.amount) > highest) {
+            highest = Number(expense.amount);
+        }
+    });
+
+    totalElement.textContent = total.toLocaleString("en-IN");
+    transactionElement.textContent = expenses.length;
+    highestElement.textContent = highest.toLocaleString("en-IN");
+
     if (expenses.length === 0) {
         emptyMessage.style.display = "block";
     } else {
         emptyMessage.style.display = "none";
     }
 
+    // Display Expenses
     expenses.forEach((expense, index) => {
-const selectedCategory = filterCategory.value;
 
-    if (
-        selectedCategory !== "All" &&
-        expense.category !== selectedCategory
-    ) {
-        return;
-    }
+        const selectedCategory = filterCategory.value;
+
+        if (
+            selectedCategory !== "All" &&
+            expense.category !== selectedCategory
+        ) {
+            return;
+        }
+
         const li = document.createElement("li");
 
         li.innerHTML = `
             <div class="expense-info">
                 <h3>${expense.name}</h3>
                 <p>💰 ₹${Number(expense.amount).toLocaleString("en-IN")}</p>
-                <p>📂 ${expense.category || "Others"}</p>
+                <p>📂 ${expense.category}</p>
             </div>
 
             <div class="buttons">
-               <button class="edit-btn">✏ Edit</button>
-               <button class="delete-btn">🗑 Delete</button>
+                <button class="edit-btn">✏ Edit</button>
+                <button class="delete-btn">🗑 Delete</button>
             </div>
         `;
 
-        const deleteBtn = li.querySelector(".delete-btn");
+        // Edit
         const editBtn = li.querySelector(".edit-btn");
+
         editBtn.addEventListener("click", function () {
 
             nameInput.value = expense.name;
             amountInput.value = expense.amount;
             categoryInput.value = expense.category;
 
-    editIndex = index;
+            editIndex = index;
 
-    form.querySelector("button").textContent = "Update Expense";
-});
+            submitBtn.textContent = "Update Expense";
+        });
+
+        // Delete
+        const deleteBtn = li.querySelector(".delete-btn");
+
         deleteBtn.addEventListener("click", function () {
             deleteExpense(index);
         });
 
         expenseList.appendChild(li);
-
-        total += Number(expense.amount);
-        if (Number(expense.amount) > highest) {
-          highest = Number(expense.amount);
-}
     });
-
-    totalElement.textContent = total.toLocaleString("en-IN");
-    transactionElement.textContent = expenses.length;
-    highestElement.textContent = highest.toLocaleString("en-IN");
 }
 
-// Add Expense
+// Add / Update Expense
 form.addEventListener("submit", function (e) {
 
     e.preventDefault();
@@ -91,7 +107,7 @@ form.addEventListener("submit", function (e) {
     if (
         name === "" ||
         amount <= 0 ||
-        category === "" ||
+        category === ""
     ) {
         alert("Please fill all fields correctly.");
         return;
@@ -100,27 +116,27 @@ form.addEventListener("submit", function (e) {
     const newExpense = {
         name,
         amount,
-        category,
+        category
     };
 
-    if(editIndex === -1){
+    if (editIndex === -1) {
 
-    expenses.push(newExpense);
+        expenses.push(newExpense);
 
-}else{
+    } else {
 
-    expenses[editIndex] = newExpense;
+        expenses[editIndex] = newExpense;
 
-    editIndex = -1;
+        editIndex = -1;
 
-    form.querySelector("button").textContent = "Add Expense";
-}
+        submitBtn.textContent = "Add Expense";
+    }
 
     localStorage.setItem("expenses", JSON.stringify(expenses));
 
-    loadExpenses();
-
     form.reset();
+
+    loadExpenses();
 });
 
 // Delete Expense
@@ -132,6 +148,9 @@ function deleteExpense(index) {
 
     loadExpenses();
 }
+
+// Filter
 filterCategory.addEventListener("change", loadExpenses);
+
 // Initial Load
 loadExpenses();
