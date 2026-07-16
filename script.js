@@ -3,6 +3,7 @@ const nameInput = document.getElementById("expense-name");
 const amountInput = document.getElementById("expense-amount");
 const categoryInput = document.getElementById("expense-category");
 const filterCategory = document.getElementById("filter-category");
+const searchInput = document.getElementById("search");
 
 const expenseList = document.getElementById("expense-list");
 const totalElement = document.getElementById("total");
@@ -45,7 +46,11 @@ function loadExpenses() {
 
     // Display Expenses
     expenses.forEach((expense, index) => {
+      const searchText = searchInput.value.toLowerCase();
 
+         if (!expense.name.toLowerCase().includes(searchText)) {
+           return;
+         }
         const selectedCategory = filterCategory.value;
 
         if (
@@ -151,6 +156,6 @@ function deleteExpense(index) {
 
 // Filter
 filterCategory.addEventListener("change", loadExpenses);
-
+searchInput.addEventListener("input", loadExpenses);
 // Initial Load
 loadExpenses();
