@@ -72,6 +72,7 @@ function loadExpenses() {
 
         // Edit
         const editBtn = li.querySelector(".edit-btn");
+        const deleteBtn = li.querySelector(".delete-btn");
 
         editBtn.addEventListener("click", function () {
 
@@ -85,7 +86,6 @@ function loadExpenses() {
         });
 
         // Delete
-        const deleteBtn = li.querySelector(".delete-btn");
 
         deleteBtn.addEventListener("click", function () {
             deleteExpense(index);
